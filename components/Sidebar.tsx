@@ -62,7 +62,7 @@ export default function AdminLayout({
   );
 
   return (
-    <div className="min-h-screen flex bg-[#FBFBFB]">
+    <div className="min-h-screen flex">
       <Drawer
         variant="temporary"
         open={mobileOpen}
