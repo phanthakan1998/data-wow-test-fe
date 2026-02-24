@@ -8,9 +8,10 @@ import {
   Divider,
 } from "@mui/material";
 import clsx from "clsx";
-import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-interface IConcertCardProps {
+import PersonIcon from "@/assets/icons/PersonIcon";
+
+interface IConcertDetailCardProps {
   title: string;
   description: string;
   attendees: number;
@@ -19,41 +20,75 @@ interface IConcertCardProps {
   className?: string;
 }
 
-//TODO change icon
-
-export default function ConcertCard({
+export default function ConcertDetailCard({
   title,
   description,
   attendees,
   onDelete,
   className,
-}: IConcertCardProps) {
+}: IConcertDetailCardProps) {
   return (
     <Card
-      className={clsx(
-        "w-full rounded-lg border border-gray-200 shadow-sm px-2.5",
-        className,
-      )}
+      className={clsx(className)}
       elevation={0}
+      sx={{
+        width: "100%",
+        borderRadius: "8px",
+        border: "1px solid #C2C2C2",
+        boxShadow: "0px 1px 3px rgba(0,0,0,0.1)",
+      }}
     >
-      <CardContent className="p-6">
-        <Typography variant="h6" className="text-[#1692EC] font-semibold mb-4">
+      <CardContent sx={{ p: 4 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            color: "#1692EC",
+            fontWeight: 600,
+            fontSize: "32px",
+          }}
+        >
           {title}
         </Typography>
-        <Divider className="!my-2" />
+
+        <Divider sx={{ my: 2 }} />
+
         <Typography
           variant="body2"
-          className="text-black leading-relaxed mb-6 text-[24px]"
+          sx={{
+            color: "#000",
+            lineHeight: "1.625",
+            mb: 6,
+            fontSize: "24px",
+          }}
         >
           {description}
         </Typography>
 
-        <Box className="flex items-center justify-between">
-          <Box className="flex items-center justify-center text-black text-[32px] ">
-            <PermIdentityOutlinedIcon />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#000",
+              fontSize: "32px",
+            }}
+          >
+            <PersonIcon size={32} />
             <Typography
               variant="body2"
-              className="flex text-center items-center !ml-1 text-[24px]"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                ml: 1,
+                fontSize: "24px",
+              }}
             >
               {attendees}
             </Typography>
@@ -63,7 +98,16 @@ export default function ConcertCard({
             variant="contained"
             color="error"
             onClick={onDelete}
-            className="rounded-sm"
+            sx={{
+              borderRadius: "4px",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              width: "160px",
+              height: "60px",
+              textTransform: "none",
+              fontSize: "24px",
+            }}
           >
             <DeleteOutlineOutlinedIcon />
             <p>Delete</p>

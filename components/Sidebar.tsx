@@ -4,12 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { Drawer, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import HistoryIcon from "@mui/icons-material/History";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import LogoutIcon from "@mui/icons-material/Logout";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-
-//TODO need to find icon
+import { useAuthContext } from "@/providers/AuthProvider";
+import { Role } from "@/enums/role";
+import HomeIcon from "@/assets/icons/HomeIcon";
+import HistoryIcon from "@/assets/icons/HistoryIcon";
+import SwitchIcon from "@/assets/icons/SwitchIcon";
 
 export default function AdminLayout({
   children,
@@ -17,43 +19,61 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { role, logout, switchRole } = useAuthContext();
 
   const drawerContent = (
     <div className="h-full flex flex-col bg-white w-64">
       <div className="p-6 mt-10">
         <Typography variant="h4" fontWeight="bold">
-          Admin
+          {role === Role.ADMIN ? "Admin" : "User"}
         </Typography>
       </div>
 
       <nav className="flex-1 px-4 py-4 space-y-2">
-        <Link
-          href="/admin"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium"
-        >
-          <HomeOutlinedIcon fontSize="medium" />
-          Home
-        </Link>
+        {role === Role.ADMIN && (
+          <>
+            <Link
+              href="/admin"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-2xl"
+            >
+              <HomeIcon />
+              Home
+            </Link>
 
-        <Link
-          href="/admin/history"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100"
-        >
-          <HistoryIcon fontSize="small" />
-          History
-        </Link>
+            <Link
+              href="/admin/history"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 text-2xl"
+            >
+              <HistoryIcon />
+              History
+            </Link>
+          </>
+        )}
 
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100"
+        {role === "user" && (
+          <Link
+            href="/"
+            className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-2xl"
+          >
+            <HistoryIcon />
+            User Home
+          </Link>
+        )}
+
+        <button
+          onClick={switchRole}
+          className="flex items-center gap-3 w-full px-4 py-2 rounded-lg hover:bg-gray-100 text-left text-2xl"
         >
-          <SwapHorizIcon fontSize="small" />
-          Switch to user
-        </Link>
+          <SwitchIcon />
+          Switch to {role === Role.ADMIN ? Role.USER : Role.ADMIN}
+        </button>
       </nav>
 
       <div className="p-4">
-        <button className="flex items-center gap-3 w-full px-4 py-2 rounded-lg hover:bg-gray-100 text-left">
+        <button
+          onClick={logout}
+          className="flex items-center gap-3 w-full px-4 py-2 rounded-lg hover:bg-gray-100 text-left"
+        >
           <LogoutIcon fontSize="small" />
           Logout
         </button>
@@ -69,9 +89,7 @@ export default function AdminLayout({
         onClose={() => setMobileOpen(false)}
         className="md:hidden"
         slotProps={{
-          paper: {
-            className: "w-64",
-          },
+          paper: { className: "w-64" },
         }}
       >
         {drawerContent}
