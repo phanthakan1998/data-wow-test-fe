@@ -1,15 +1,15 @@
 import $axios from "axios";
 
 export const axios = $axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // const token = localStorage.getItem("authToken");
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`;
+    // }
 
     return config;
   },

@@ -1,7 +1,9 @@
 "use client";
 import ConcertDetailCard from "@/components/ConcertDetailCard";
+import { IConcertResponse, IDashboardSummary } from "@/interfaces/dashboard";
 import { Box, Tab, Tabs } from "@mui/material";
 import React from "react";
+import ConcertCreateCard from "./ConcertCreateCard";
 
 interface IConcertDetailContainer {
   children?: React.ReactNode;
@@ -27,7 +29,13 @@ function CustomTabPanel(props: IConcertDetailContainer) {
   );
 }
 
-export default function ConcertDetailContainer() {
+interface IConcertDetailContainerProps {
+  concertDetail: IConcertResponse[];
+}
+
+export default function ConcertDetailContainer({
+  concertDetail,
+}: IConcertDetailContainerProps) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -53,23 +61,21 @@ export default function ConcertDetailContainer() {
         </Tabs>
         <CustomTabPanel value={value} index={0} className="mt-4">
           <div className="flex flex-col gap-6">
-            <ConcertDetailCard
-              title="Coldplay Live"
-              description="Lorem ipsum dolor sit amet consectetur. Elit purus nam gravida porttitor nibh urna sit ornare a. Proin dolor morbi id ornare aenean non. Fusce dignissim turpis sed non est orci sed in. Blandit ut purus nunc sed donec commodo morbi diam scelerisque."
-              attendees={500}
-              onDelete={() => console.log("Delete concert")}
-            />
-
-            <ConcertDetailCard
-              title="Taylor Swift Tour"
-              description="Lorem ipsum dolor sit amet consectetur. Elit purus nam gravida porttitor nibh urna sit ornare a. "
-              attendees={200}
-              onDelete={() => console.log("Delete concert")}
-            />
+            <div className="flex flex-col gap-6">
+              {concertDetail.map((concert) => (
+                <ConcertDetailCard
+                  key={concert.id}
+                  title={concert.name}
+                  description={concert.description}
+                  attendees={concert.totalSeats}
+                  onDelete={() => console.log("Delete concert", concert.id)}
+                />
+              ))}
+            </div>
           </div>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          Item Two
+          <ConcertCreateCard />
         </CustomTabPanel>
       </Box>
     </Box>

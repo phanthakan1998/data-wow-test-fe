@@ -15,7 +15,7 @@ import { useState } from "react";
 export default function ConcertCreateCard() {
   const [form, setForm] = useState({
     name: "",
-    seats: 500,
+    seats: 0,
     description: "",
   });
 
@@ -35,6 +35,7 @@ export default function ConcertCreateCard() {
       sx={{
         borderRadius: 3,
         border: "1px solid #e5e7eb",
+        marginTop: "32px",
       }}
     >
       <CardContent sx={{ p: 4 }}>
@@ -76,13 +77,23 @@ export default function ConcertCreateCard() {
               fullWidth
               type="number"
               value={form.seats}
+              onKeyDown={(e) => {
+                if (e.key === "-" || e.key === "e") {
+                  e.preventDefault();
+                }
+              }}
               onChange={handleChange("seats")}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <PersonOutlineIcon />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                htmlInput: {
+                  min: 0,
+                },
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <PersonOutlineIcon />
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
           </Box>
