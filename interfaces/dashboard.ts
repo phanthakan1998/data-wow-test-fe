@@ -16,3 +16,9 @@ export interface IDashboardSummaryResponse {
   totalReserved: number;
   totalCanceled: number;
 }
+
+export interface ICreateConcertRequest {
+  name: string;
+  description: string;
+  totalSeats: number;
+}

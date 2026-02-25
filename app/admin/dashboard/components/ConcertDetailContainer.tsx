@@ -1,10 +1,10 @@
 "use client";
 import ConcertDetailCard from "@/components/ConcertDetailCard";
-import { IConcertResponse, IDashboardSummary } from "@/interfaces/dashboard";
-import { Box, Tab, Tabs } from "@mui/material";
-import React from "react";
+import { IConcertResponse } from "@/interfaces/dashboard";
+import { Alert, Box, Snackbar, Tab, Tabs } from "@mui/material";
+import React, { useState } from "react";
 import ConcertCreateCard from "./ConcertCreateCard";
-
+import { createConcert } from "@/app/services/concert";
 interface IConcertDetailContainer {
   children?: React.ReactNode;
   index: number;
@@ -36,48 +36,72 @@ interface IConcertDetailContainerProps {
 export default function ConcertDetailContainer({
   concertDetail,
 }: IConcertDetailContainerProps) {
-  const [value, setValue] = React.useState(0);
+  const [indexTab, setIndexTab] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    setIndexTab(newValue);
+  };
+
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+
+  const onSuccessCreate = () => {
+    setIndexTab(0);
+    setIsOpenAlert(true);
   };
 
   return (
-    <Box>
-      <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 4 }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          sx={{
-            "& .MuiTab-root": {
-              fontSize: "24px",
-              fontWeight: 600,
-              textTransform: "none",
-            },
-          }}
+    <>
+      <Snackbar
+        open={isOpenAlert}
+        autoHideDuration={1500}
+        onClose={() => setIsOpenAlert(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          severity="success"
+          variant="filled"
+          onClose={() => setIsOpenAlert(false)}
+          sx={{ fontSize: 18 }}
         >
-          <Tab label="Overview" />
-          <Tab label="Create" />
-        </Tabs>
-        <CustomTabPanel value={value} index={0} className="mt-4">
-          <div className="flex flex-col gap-6">
+          Create successfully
+        </Alert>
+      </Snackbar>
+      <Box>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 4 }}>
+          <Tabs
+            value={indexTab}
+            onChange={handleChange}
+            sx={{
+              "& .MuiTab-root": {
+                fontSize: "24px",
+                fontWeight: 600,
+                textTransform: "none",
+              },
+            }}
+          >
+            <Tab label="Overview" />
+            <Tab label="Create" />
+          </Tabs>
+          <CustomTabPanel value={indexTab} index={0} className="mt-4">
             <div className="flex flex-col gap-6">
-              {concertDetail.map((concert) => (
-                <ConcertDetailCard
-                  key={concert.id}
-                  title={concert.name}
-                  description={concert.description}
-                  attendees={concert.totalSeats}
-                  onDelete={() => console.log("Delete concert", concert.id)}
-                />
-              ))}
+              <div className="flex flex-col gap-6">
+                {concertDetail.map((concert) => (
+                  <ConcertDetailCard
+                    key={concert.id}
+                    title={concert.name}
+                    description={concert.description}
+                    attendees={concert.totalSeats}
+                    onDelete={() => console.log("Delete concert", concert.id)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          <ConcertCreateCard />
-        </CustomTabPanel>
+          </CustomTabPanel>
+          <CustomTabPanel value={indexTab} index={1}>
+            <ConcertCreateCard onSuccessCreate={onSuccessCreate} />
+          </CustomTabPanel>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }
