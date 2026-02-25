@@ -4,7 +4,10 @@ import { IConcertResponse } from "@/interfaces/dashboard";
 import { Alert, Box, Snackbar, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import ConcertCreateCard from "./ConcertCreateCard";
-import { createConcert } from "@/app/services/concert";
+import { deleteConcert } from "@/app/services/concert.service";
+import { IErrorAlert } from "@/interfaces/components";
+import { useRouter } from "next/navigation";
+
 interface IConcertDetailContainer {
   children?: React.ReactNode;
   index: number;
@@ -43,12 +46,33 @@ export default function ConcertDetailContainer({
   };
 
   const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [alert, setAlert] = useState<IErrorAlert | null>(null);
+
+  const router = useRouter();
 
   const onSuccessCreate = () => {
     setIndexTab(0);
     setIsOpenAlert(true);
   };
 
+  //TODO add loading
+
+  const onDeleteConcert = async (id: string) => {
+    try {
+      await deleteConcert(id);
+
+      setAlert({
+        type: "success",
+        message: "Delete successfully",
+      });
+      router.refresh();
+    } catch {
+      setAlert({
+        type: "error",
+        message: "Delete failed",
+      });
+    }
+  };
   return (
     <>
       <Snackbar
@@ -58,12 +82,12 @@ export default function ConcertDetailContainer({
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
         <Alert
-          severity="success"
+          severity={alert?.type}
           variant="filled"
           onClose={() => setIsOpenAlert(false)}
           sx={{ fontSize: 18 }}
         >
-          Create successfully
+          {alert?.message}
         </Alert>
       </Snackbar>
       <Box>
@@ -91,7 +115,7 @@ export default function ConcertDetailContainer({
                     title={concert.name}
                     description={concert.description}
                     attendees={concert.totalSeats}
-                    onDelete={() => console.log("Delete concert", concert.id)}
+                    onConfirm={() => onDeleteConcert(concert.id)}
                   />
                 ))}
               </div>

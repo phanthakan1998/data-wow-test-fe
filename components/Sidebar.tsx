@@ -4,9 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Drawer, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import LogoutIcon from "@mui/icons-material/Logout";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { useAuthContext } from "@/providers/AuthProvider";
 import { Role } from "@/enums/role";
 import HomeIcon from "@/assets/icons/HomeIcon";
@@ -33,7 +31,7 @@ export default function AdminLayout({
         {role === Role.ADMIN && (
           <>
             <Link
-              href="/admin"
+              href="/admin/dashboard"
               className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-2xl"
             >
               <HomeIcon />
@@ -52,7 +50,7 @@ export default function AdminLayout({
 
         {role === "user" && (
           <Link
-            href="/"
+            href="/user"
             className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-2xl"
           >
             <HistoryIcon />
@@ -60,13 +58,14 @@ export default function AdminLayout({
           </Link>
         )}
 
-        <button
+        <Link
+          href={role === Role.ADMIN ? "/user" : "/admin/dashboard"}
           onClick={switchRole}
-          className="flex items-center gap-3 w-full px-4 py-2 rounded-lg hover:bg-gray-100 text-left text-2xl"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-2xl"
         >
           <SwitchIcon />
           Switch to {role === Role.ADMIN ? Role.USER : Role.ADMIN}
-        </button>
+        </Link>
       </nav>
 
       <div className="p-4">

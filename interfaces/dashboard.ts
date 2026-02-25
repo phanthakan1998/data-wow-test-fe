@@ -22,3 +22,12 @@ export interface ICreateConcertRequest {
   description: string;
   totalSeats: number;
 }
+
+export interface IConcertHistoryResponse {
+  id: string;
+  concertId: string;
+  userName: string;
+  action: "RESERVED" | "CANCELED";
+  seatNumber: number;
+  createdAt: string;
+}

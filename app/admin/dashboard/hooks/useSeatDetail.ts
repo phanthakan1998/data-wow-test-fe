@@ -1,4 +1,4 @@
-import { getDashboardSummary } from "@/app/services/concert";
+import { getDashboardSummary } from "@/app/services/concert.service";
 import { IDashboardSummary } from "@/interfaces/dashboard";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";

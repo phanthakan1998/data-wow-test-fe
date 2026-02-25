@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { JSX, ReactNode } from "react";
 import {
   Card,
   CardContent,
@@ -6,27 +6,62 @@ import {
   Button,
   Box,
   Divider,
+  ButtonPropsColorOverrides,
+  ButtonProps,
 } from "@mui/material";
 import clsx from "clsx";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import PersonIcon from "@/assets/icons/PersonIcon";
-
+import { ConcertType } from "@/enums/concert";
+type MuiColor = ButtonProps["color"];
 interface IConcertDetailCardProps {
   title: string;
   description: string;
   attendees: number;
   icon?: ReactNode;
-  onDelete?: () => void;
+  onConfirm?: () => void;
   className?: string;
+  type?: ConcertType;
+}
+
+interface IActionCard {
+  text: string;
+  color: MuiColor;
+  icon: ReactNode | null;
 }
 
 export default function ConcertDetailCard({
   title,
   description,
   attendees,
-  onDelete,
+  onConfirm,
   className,
+  type = ConcertType.DELETE,
 }: IConcertDetailCardProps) {
+  const getActionCard = (): IActionCard => {
+    if (type === ConcertType.CANCEl) {
+      return {
+        color: "error",
+        text: "Cancel",
+        icon: "",
+      };
+    }
+    if (type === ConcertType.RESERVE) {
+      return {
+        color: "primary",
+        text: "Reserve",
+        icon: "",
+      };
+    }
+    return {
+      color: "error",
+      text: "Delete",
+      icon: <DeleteOutlineOutlinedIcon />,
+    };
+  };
+
+  const actionCard = getActionCard();
+
   return (
     <Card
       className={clsx(className)}
@@ -96,8 +131,17 @@ export default function ConcertDetailCard({
 
           <Button
             variant="contained"
-            color="error"
-            onClick={onDelete}
+            color={
+              actionCard.color as
+                | "error"
+                | "inherit"
+                | "primary"
+                | "secondary"
+                | "success"
+                | "info"
+                | "warning"
+            }
+            onClick={onConfirm}
             sx={{
               borderRadius: "4px",
               display: "flex",
@@ -109,8 +153,8 @@ export default function ConcertDetailCard({
               fontSize: "24px",
             }}
           >
-            <DeleteOutlineOutlinedIcon />
-            <p>Delete</p>
+            {actionCard.icon}
+            <p>{actionCard.text}</p>
           </Button>
         </Box>
       </CardContent>

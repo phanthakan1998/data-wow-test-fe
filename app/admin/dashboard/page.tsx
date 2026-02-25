@@ -1,6 +1,9 @@
 import { Box } from "@mui/material";
 import SeatDetailContainer from "./components/SeatDetailContainer";
-import { getAllConcerts, getDashboardSummary } from "@/app/services/concert";
+import {
+  getAllConcerts,
+  getDashboardSummary,
+} from "@/app/services/concert.service";
 import { IConcertResponse, IDashboardSummary } from "@/interfaces/dashboard";
 import ConcertDetailContainer from "./components/ConcertDetailContainer";
 

@@ -13,3 +13,8 @@ export interface IIconProps {
   size?: number;
   className?: string;
 }
+
+export interface IErrorAlert {
+  type: "success" | "error";
+  message: string;
+}

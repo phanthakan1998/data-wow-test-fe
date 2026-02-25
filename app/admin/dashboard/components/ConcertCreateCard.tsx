@@ -13,7 +13,7 @@ import {
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { useState } from "react";
-import { createConcert } from "@/app/services/concert";
+import { createConcert } from "@/app/services/concert.service";
 
 interface IConcertCreateCardProps {
   onSuccessCreate: () => void;

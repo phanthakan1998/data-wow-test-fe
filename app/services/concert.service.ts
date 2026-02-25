@@ -1,4 +1,5 @@
 import {
+  IConcertHistoryResponse,
   IConcertResponse,
   ICreateConcertRequest,
   IDashboardSummaryResponse,
@@ -28,6 +29,23 @@ export const createConcert = async (
     "/concerts",
     payload,
   );
+
+  return response.data.data;
+};
+
+export const deleteConcert = async (
+  concertId: string,
+): Promise<IConcertResponse> => {
+  const response = await api.delete<IApiResponse<IConcertResponse>>(
+    `/concerts/${concertId}`,
+  );
+
+  return response.data.data;
+};
+
+export const getAllHistory = async (): Promise<IConcertHistoryResponse[]> => {
+  const response =
+    await api.get<IApiResponse<IConcertHistoryResponse[]>>("/concerts/history");
 
   return response.data.data;
 };
