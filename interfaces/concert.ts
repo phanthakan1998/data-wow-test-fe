@@ -1,3 +1,5 @@
+import { HistoryAction } from "@/enums/history";
+
 export interface IDashboardSummary {
   totalSeats: number;
   totalReserved: number;
@@ -25,9 +27,8 @@ export interface ICreateConcertRequest {
 
 export interface IConcertHistoryResponse {
   id: string;
-  concertId: string;
+  concertName: string;
   userName: string;
-  action: "RESERVED" | "CANCELED";
-  seatNumber: number;
+  action: HistoryAction;
   createdAt: string;
 }

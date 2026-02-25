@@ -1,12 +1,11 @@
 import { Box } from "@mui/material";
-import { getAllHistory } from "@/app/services/concert.service";
-import { IConcertHistoryResponse } from "@/interfaces/dashboard";
+import { IConcertHistoryResponse } from "@/interfaces/concert";
 import HistoryTable from "./components/HistoryTable";
+import { getAllHistory } from "@/services/concert.service";
 
 async function getHistory(): Promise<IConcertHistoryResponse[]> {
   try {
-    const result = await getAllHistory();
-    return result;
+    return await getAllHistory();
   } catch {
     return [];
   }
@@ -14,11 +13,10 @@ async function getHistory(): Promise<IConcertHistoryResponse[]> {
 
 export default async function HistoryPage() {
   const historyData = await getHistory();
-  console.log(historyData);
 
   return (
     <Box>
-      <HistoryTable />
+      <HistoryTable rows={historyData} />
     </Box>
   );
 }

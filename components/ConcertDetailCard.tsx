@@ -1,4 +1,4 @@
-import { JSX, ReactNode } from "react";
+import { ReactNode } from "react";
 import {
   Card,
   CardContent,
@@ -6,7 +6,6 @@ import {
   Button,
   Box,
   Divider,
-  ButtonPropsColorOverrides,
   ButtonProps,
 } from "@mui/material";
 import clsx from "clsx";
@@ -39,20 +38,23 @@ export default function ConcertDetailCard({
   type = ConcertType.DELETE,
 }: IConcertDetailCardProps) {
   const getActionCard = (): IActionCard => {
-    if (type === ConcertType.CANCEl) {
+    console.log({ type });
+
+    if (type === ConcertType.RESERVE) {
       return {
         color: "error",
         text: "Cancel",
         icon: "",
       };
     }
-    if (type === ConcertType.RESERVE) {
+    if (type === ConcertType.FULL || type === ConcertType.AVAILABLE) {
       return {
         color: "primary",
         text: "Reserve",
         icon: "",
       };
     }
+
     return {
       color: "error",
       text: "Delete",
@@ -128,19 +130,10 @@ export default function ConcertDetailCard({
               {attendees}
             </Typography>
           </Box>
-
           <Button
             variant="contained"
-            color={
-              actionCard.color as
-                | "error"
-                | "inherit"
-                | "primary"
-                | "secondary"
-                | "success"
-                | "info"
-                | "warning"
-            }
+            disabled={type === ConcertType.FULL}
+            color={actionCard.color}
             onClick={onConfirm}
             sx={{
               borderRadius: "4px",

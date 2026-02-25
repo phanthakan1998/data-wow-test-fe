@@ -2,7 +2,7 @@ import BadgeIcon from "@/assets/icons/BadgeIcon";
 import CloseCircleIcon from "@/assets/icons/CloseWithCircleIcon";
 import PersonIcon from "@/assets/icons/PersonIcon";
 import DisplayBox from "@/components/DisplayBox";
-import { IDashboardSummary } from "@/interfaces/dashboard";
+import { IDashboardSummary } from "@/interfaces/concert";
 
 interface ISeatDetailContainerProps {
   dashboardDetail: IDashboardSummary;

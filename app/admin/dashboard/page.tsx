@@ -1,11 +1,12 @@
 import { Box } from "@mui/material";
 import SeatDetailContainer from "./components/SeatDetailContainer";
+
+import { IConcertResponse, IDashboardSummary } from "@/interfaces/concert";
+import ConcertDetailContainer from "./components/ConcertDetailContainer";
 import {
   getAllConcerts,
   getDashboardSummary,
-} from "@/app/services/concert.service";
-import { IConcertResponse, IDashboardSummary } from "@/interfaces/dashboard";
-import ConcertDetailContainer from "./components/ConcertDetailContainer";
+} from "@/services/concert.service";
 
 async function getDashboardData(): Promise<IDashboardSummary> {
   try {

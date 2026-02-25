@@ -3,8 +3,8 @@ import {
   IConcertResponse,
   ICreateConcertRequest,
   IDashboardSummaryResponse,
-} from "@/interfaces/dashboard";
-import api from "../../core/axios";
+} from "@/interfaces/concert";
+import api from "../core/axios";
 import { IApiResponse } from "@/interfaces/api";
 
 export const getAllConcerts = async (): Promise<IConcertResponse[]> => {

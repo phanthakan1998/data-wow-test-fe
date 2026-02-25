@@ -9,6 +9,7 @@ interface IAuthContextProps {
   login: (role: Role) => void;
   logout: () => void;
   switchRole: () => void;
+  userId: string;
 }
 
 const AuthContext = createContext<IAuthContextProps | undefined>(undefined);
@@ -41,7 +42,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, role, login, logout, switchRole }}
+      value={{ isAuthenticated, role, login, logout, switchRole, userId: "1" }}
     >
       {children}
     </AuthContext.Provider>

@@ -1,12 +1,12 @@
 "use client";
 import ConcertDetailCard from "@/components/ConcertDetailCard";
-import { IConcertResponse } from "@/interfaces/dashboard";
+import { IConcertResponse } from "@/interfaces/concert";
 import { Alert, Box, Snackbar, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import ConcertCreateCard from "./ConcertCreateCard";
-import { deleteConcert } from "@/app/services/concert.service";
 import { IErrorAlert } from "@/interfaces/components";
 import { useRouter } from "next/navigation";
+import { deleteConcert } from "@/services/concert.service";
 
 interface IConcertDetailContainer {
   children?: React.ReactNode;

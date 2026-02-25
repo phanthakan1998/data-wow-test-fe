@@ -1,10 +1,10 @@
-import { getAllConcerts } from "@/app/services/concert.service";
-import { IConcertResponse } from "@/interfaces/dashboard";
 import ConcertCardContainer from "./components/ConcertCardContainer";
+import { getAllUserConcert } from "@/services/reservation.service";
+import { IUserConcertDetail } from "@/interfaces/reservation";
 
-async function getConcerts(): Promise<IConcertResponse[]> {
+async function getConcerts(): Promise<IUserConcertDetail[]> {
   try {
-    return await getAllConcerts();
+    return await getAllUserConcert("1");
   } catch {
     return [];
   }
