@@ -8,6 +8,11 @@ npm install
 npm run dev 
 ```
 
+Create a .env file in the root directory and add:
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:3002
+```
+
 
 ## Architecture
 
