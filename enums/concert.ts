@@ -1,5 +1,5 @@
 export enum ConcertType {
-  CANCEl = "CANCELED",
+  CANCEL = "CANCELED",
   DELETE = "DELETE",
   RESERVE = "RESERVED",
   FULL = "FULL",

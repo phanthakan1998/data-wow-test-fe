@@ -24,16 +24,25 @@ export default function ConcertCreateCard({
 }: IConcertCreateCardProps) {
   const [form, setForm] = useState({
     name: "",
-    seats: 0,
+    seats: "",
     description: "",
   });
 
   const [isOpenAlert, setIsOpenAlert] = useState(false);
 
   const handleChange =
-    (field: string) =>
-    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setForm({ ...form, [field]: event.target.value });
+    (field: keyof typeof form) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      let value = event.target.value;
+
+      if (field === "seats") {
+        value = value.replace(/^0+(?=\d)/, "");
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
     };
 
   const handleSubmit = async () => {
@@ -110,7 +119,8 @@ export default function ConcertCreateCard({
               <TextField
                 fullWidth
                 type="number"
-                value={form.seats}
+                placeholder="Please total of seats"
+                value={form.seats ?? ""}
                 onKeyDown={(e) => {
                   if (e.key === "-" || e.key === "e") {
                     e.preventDefault();

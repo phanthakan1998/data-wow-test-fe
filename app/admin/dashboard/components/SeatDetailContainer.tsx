@@ -1,5 +1,5 @@
 import BadgeIcon from "@/assets/icons/BadgeIcon";
-import CloseCircleIcon from "@/assets/icons/CloseWithCircleIcon";
+import CloseWithCircleIconLight from "@/assets/icons/CloseWithCircleIconLight";
 import PersonIcon from "@/assets/icons/PersonIcon";
 import DisplayBox from "@/components/DisplayBox";
 import { IDashboardSummary } from "@/interfaces/concert";
@@ -30,7 +30,7 @@ export default function SeatDetailContainer({
       <DisplayBox
         title="Cancel"
         value={dashboardDetail.totalCanceled}
-        icon={<CloseCircleIcon size={40} />}
+        icon={<CloseWithCircleIconLight size={40} />}
         bgColor="bg-[#E84E4E]"
         className="rounded-lg"
       />

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import {
   Card,
   CardContent,
@@ -14,7 +14,9 @@ import PersonIcon from "@/assets/icons/PersonIcon";
 import { ConcertType } from "@/enums/concert";
 import ConfirmModal from "./ConfirmModal";
 import CloseCircleIcon from "@/assets/icons/CloseWithCircleIcon";
+
 type MuiColor = ButtonProps["color"];
+
 interface IConcertDetailCardProps {
   title: string;
   description: string;
@@ -30,7 +32,7 @@ interface IConcertDetailCardProps {
 interface IActionCard {
   text: string;
   color: MuiColor;
-  icon: ReactNode | null;
+  icon?: ReactNode;
 }
 
 export default function ConcertDetailCard({
@@ -40,41 +42,53 @@ export default function ConcertDetailCard({
   onConfirm,
   className,
   type = ConcertType.DELETE,
-  loading,
-  isAdmin,
+  isAdmin = false,
 }: IConcertDetailCardProps) {
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const getActionCard = (): IActionCard => {
-    if (type === ConcertType.RESERVE) {
-      return {
+
+  const actionConfig: IActionCard = useMemo(() => {
+    const configMap: Record<ConcertType, IActionCard> = {
+      [ConcertType.RESERVE]: {
         color: "error",
         text: "Cancel",
-        icon: "",
-      };
-    }
-    if (
-      type === ConcertType.FULL ||
-      type === ConcertType.AVAILABLE ||
-      type === ConcertType.CANCEl
-    ) {
-      return {
+      },
+      [ConcertType.FULL]: {
         color: "primary",
         text: "Reserve",
-        icon: "",
-      };
-    }
-
-    return {
-      color: "error",
-      text: "Delete",
-      icon: <DeleteOutlineOutlinedIcon />,
+      },
+      [ConcertType.AVAILABLE]: {
+        color: "primary",
+        text: "Reserve",
+      },
+      [ConcertType.CANCEL]: {
+        color: "primary",
+        text: "Reserve",
+      },
+      [ConcertType.DELETE]: {
+        color: "error",
+        text: "Delete",
+        icon: <DeleteOutlineOutlinedIcon />,
+      },
     };
+
+    return configMap[type];
+  }, [type]);
+
+  const handleClick = () => {
+    if (isAdmin) {
+      setIsOpenModal(true);
+    } else {
+      onConfirm?.();
+    }
   };
 
-  const actionCard = getActionCard();
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
+  };
 
-  const onClickButton = () => {
-    setIsOpenModal(true);
+  const handleConfirm = () => {
+    onConfirm?.();
+    setIsOpenModal(false);
   };
 
   return (
@@ -87,42 +101,50 @@ export default function ConcertDetailCard({
           description={`"${title}"`}
           confirmText="Yes, Delete"
           cancelText="Cancel"
-          onConfirm={onConfirm}
-          onCancel={() => setIsOpenModal(false)}
+          onConfirm={handleConfirm}
+          onCancel={handleCloseModal}
           icon={<CloseCircleIcon size={48} />}
         />
       )}
+
       <Card
         className={clsx(className)}
         elevation={0}
         sx={{
           width: "100%",
-          borderRadius: "8px",
+          borderRadius: 2,
           border: "1px solid #C2C2C2",
           boxShadow: "0px 1px 3px rgba(0,0,0,0.1)",
         }}
       >
-        <CardContent sx={{ p: 4 }}>
+        <CardContent
+          sx={{
+            p: { xs: 2, sm: 3, md: 4 },
+          }}
+        >
           <Typography
             variant="h6"
             sx={{
               color: "#1692EC",
               fontWeight: 600,
-              fontSize: "32px",
+              fontSize: { xs: "20px", sm: "24px", md: "32px" },
             }}
           >
             {title}
           </Typography>
 
-          <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: { xs: 1.5, md: 2 } }} />
 
           <Typography
             variant="body2"
             sx={{
               color: "#000",
-              lineHeight: "1.625",
-              mb: 6,
-              fontSize: "24px",
+              lineHeight: 1.6,
+              mb: { xs: 3, md: 6 },
+              fontSize: { xs: "14px", sm: "16px", md: "24px" },
+
+              wordBreak: "break-word",
+              overflowWrap: "anywhere",
             }}
           >
             {description}
@@ -131,51 +153,49 @@ export default function ConcertDetailCard({
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: { xs: "flex-start", sm: "center" },
               justifyContent: "space-between",
+              gap: { xs: 2, sm: 0 },
             }}
           >
+            {/* Attendees */}
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
                 color: "#000",
-                fontSize: "32px",
               }}
             >
-              <PersonIcon size={32} />
+              <PersonIcon size={24} />
               <Typography
-                variant="body2"
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
                   ml: 1,
-                  fontSize: "24px",
+                  fontSize: { xs: "16px", sm: "18px", md: "24px" },
                 }}
               >
                 {attendees}
               </Typography>
             </Box>
+
             <Button
               variant="contained"
               disabled={type === ConcertType.FULL}
-              color={actionCard.color}
+              color={actionConfig.color}
               sx={{
-                borderRadius: "4px",
+                borderRadius: 1,
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
-                width: "160px",
-                height: "60px",
+                width: { xs: "100%", sm: "160px" },
+                height: { xs: "48px", md: "60px" },
                 textTransform: "none",
-                fontSize: "24px",
+                fontSize: { xs: "14px", sm: "16px", md: "20px" },
               }}
-              onClick={onClickButton}
-              loading={loading}
+              onClick={handleClick}
             >
-              {actionCard.icon}
-              <p>{actionCard.text}</p>
+              {actionConfig.icon}
+              {actionConfig.text}
             </Button>
           </Box>
         </CardContent>
