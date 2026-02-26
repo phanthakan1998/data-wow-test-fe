@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,6 +12,8 @@ import clsx from "clsx";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import PersonIcon from "@/assets/icons/PersonIcon";
 import { ConcertType } from "@/enums/concert";
+import ConfirmModal from "./ConfirmModal";
+import CloseCircleIcon from "@/assets/icons/CloseWithCircleIcon";
 type MuiColor = ButtonProps["color"];
 interface IConcertDetailCardProps {
   title: string;
@@ -21,6 +23,8 @@ interface IConcertDetailCardProps {
   onConfirm?: () => void;
   className?: string;
   type?: ConcertType;
+  loading: boolean;
+  isAdmin?: boolean;
 }
 
 interface IActionCard {
@@ -36,10 +40,11 @@ export default function ConcertDetailCard({
   onConfirm,
   className,
   type = ConcertType.DELETE,
+  loading,
+  isAdmin,
 }: IConcertDetailCardProps) {
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const getActionCard = (): IActionCard => {
-    console.log({ type });
-
     if (type === ConcertType.RESERVE) {
       return {
         color: "error",
@@ -47,7 +52,11 @@ export default function ConcertDetailCard({
         icon: "",
       };
     }
-    if (type === ConcertType.FULL || type === ConcertType.AVAILABLE) {
+    if (
+      type === ConcertType.FULL ||
+      type === ConcertType.AVAILABLE ||
+      type === ConcertType.CANCEl
+    ) {
       return {
         color: "primary",
         text: "Reserve",
@@ -64,93 +73,113 @@ export default function ConcertDetailCard({
 
   const actionCard = getActionCard();
 
+  const onClickButton = () => {
+    setIsOpenModal(true);
+  };
+
   return (
-    <Card
-      className={clsx(className)}
-      elevation={0}
-      sx={{
-        width: "100%",
-        borderRadius: "8px",
-        border: "1px solid #C2C2C2",
-        boxShadow: "0px 1px 3px rgba(0,0,0,0.1)",
-      }}
-    >
-      <CardContent sx={{ p: 4 }}>
-        <Typography
-          variant="h6"
-          sx={{
-            color: "#1692EC",
-            fontWeight: 600,
-            fontSize: "32px",
-          }}
-        >
-          {title}
-        </Typography>
+    <>
+      {isAdmin && (
+        <ConfirmModal
+          open={isOpenModal}
+          type="error"
+          title="Are you sure to delete?"
+          description={`"${title}"`}
+          confirmText="Yes, Delete"
+          cancelText="Cancel"
+          onConfirm={onConfirm}
+          onCancel={() => setIsOpenModal(false)}
+          icon={<CloseCircleIcon size={48} />}
+        />
+      )}
+      <Card
+        className={clsx(className)}
+        elevation={0}
+        sx={{
+          width: "100%",
+          borderRadius: "8px",
+          border: "1px solid #C2C2C2",
+          boxShadow: "0px 1px 3px rgba(0,0,0,0.1)",
+        }}
+      >
+        <CardContent sx={{ p: 4 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "#1692EC",
+              fontWeight: 600,
+              fontSize: "32px",
+            }}
+          >
+            {title}
+          </Typography>
 
-        <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: 2 }} />
 
-        <Typography
-          variant="body2"
-          sx={{
-            color: "#000",
-            lineHeight: "1.625",
-            mb: 6,
-            fontSize: "24px",
-          }}
-        >
-          {description}
-        </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              color: "#000",
+              lineHeight: "1.625",
+              mb: 6,
+              fontSize: "24px",
+            }}
+          >
+            {description}
+          </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              color: "#000",
-              fontSize: "32px",
+              justifyContent: "space-between",
             }}
           >
-            <PersonIcon size={32} />
-            <Typography
-              variant="body2"
+            <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                ml: 1,
-                fontSize: "24px",
+                justifyContent: "center",
+                color: "#000",
+                fontSize: "32px",
               }}
             >
-              {attendees}
-            </Typography>
+              <PersonIcon size={32} />
+              <Typography
+                variant="body2"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  ml: 1,
+                  fontSize: "24px",
+                }}
+              >
+                {attendees}
+              </Typography>
+            </Box>
+            <Button
+              variant="contained"
+              disabled={type === ConcertType.FULL}
+              color={actionCard.color}
+              sx={{
+                borderRadius: "4px",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                width: "160px",
+                height: "60px",
+                textTransform: "none",
+                fontSize: "24px",
+              }}
+              onClick={onClickButton}
+              loading={loading}
+            >
+              {actionCard.icon}
+              <p>{actionCard.text}</p>
+            </Button>
           </Box>
-          <Button
-            variant="contained"
-            disabled={type === ConcertType.FULL}
-            color={actionCard.color}
-            onClick={onConfirm}
-            sx={{
-              borderRadius: "4px",
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              width: "160px",
-              height: "60px",
-              textTransform: "none",
-              fontSize: "24px",
-            }}
-          >
-            {actionCard.icon}
-            <p>{actionCard.text}</p>
-          </Button>
-        </Box>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </>
   );
 }

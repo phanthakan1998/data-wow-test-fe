@@ -2,11 +2,10 @@
 import ConcertDetailCard from "@/components/ConcertDetailCard";
 import { IConcertResponse } from "@/interfaces/concert";
 import { Alert, Box, Snackbar, Tab, Tabs } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import ConcertCreateCard from "./ConcertCreateCard";
-import { IErrorAlert } from "@/interfaces/components";
-import { useRouter } from "next/navigation";
-import { deleteConcert } from "@/services/concert.service";
+
+import { useConcertDetail } from "../hooks/useConcertDetail";
 
 interface IConcertDetailContainer {
   children?: React.ReactNode;
@@ -39,40 +38,21 @@ interface IConcertDetailContainerProps {
 export default function ConcertDetailContainer({
   concertDetail,
 }: IConcertDetailContainerProps) {
-  const [indexTab, setIndexTab] = React.useState(0);
+  const {
+    indexTab,
+    setIndexTab,
+    isOpenAlert,
+    setIsOpenAlert,
+    alert,
+    onSuccessCreate,
+    onDeleteConcert,
+    loading,
+  } = useConcertDetail();
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setIndexTab(newValue);
   };
 
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
-  const [alert, setAlert] = useState<IErrorAlert | null>(null);
-
-  const router = useRouter();
-
-  const onSuccessCreate = () => {
-    setIndexTab(0);
-    setIsOpenAlert(true);
-  };
-
-  //TODO add loading
-
-  const onDeleteConcert = async (id: string) => {
-    try {
-      await deleteConcert(id);
-
-      setAlert({
-        type: "success",
-        message: "Delete successfully",
-      });
-      router.refresh();
-    } catch {
-      setAlert({
-        type: "error",
-        message: "Delete failed",
-      });
-    }
-  };
   return (
     <>
       <Snackbar
@@ -91,7 +71,7 @@ export default function ConcertDetailContainer({
         </Alert>
       </Snackbar>
       <Box>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 4 }}>
+        <Box sx={{ mt: 4 }}>
           <Tabs
             value={indexTab}
             onChange={handleChange}
@@ -116,6 +96,8 @@ export default function ConcertDetailContainer({
                     description={concert.description}
                     attendees={concert.totalSeats}
                     onConfirm={() => onDeleteConcert(concert.id)}
+                    loading={loading}
+                    isAdmin={true}
                   />
                 ))}
               </div>

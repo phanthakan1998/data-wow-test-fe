@@ -49,7 +49,6 @@ export default function ConcertCreateCard({
       setIsOpenAlert(true);
     }
   };
-  //TODO disable button when not commit
   return (
     <>
       <Snackbar

@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface IConfirmModalProps {
   open: boolean;
   type: "success" | "error";
@@ -7,6 +9,7 @@ export interface IConfirmModalProps {
   cancelText?: string;
   onConfirm?: () => void;
   onCancel?: () => void;
+  icon: ReactNode;
 }
 
 export interface IIconProps {

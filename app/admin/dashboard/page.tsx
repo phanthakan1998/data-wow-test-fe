@@ -29,7 +29,6 @@ async function getDashboardData(): Promise<IDashboardSummary> {
 async function getConcerts(): Promise<Array<IConcertResponse>> {
   try {
     const result = await getAllConcerts();
-
     return result;
   } catch {
     return [];
@@ -37,12 +36,12 @@ async function getConcerts(): Promise<Array<IConcertResponse>> {
 }
 
 export default async function DashboardPage() {
-  const dashboarData = await getDashboardData();
+  const dashboardData = await getDashboardData();
   const concerts = await getConcerts();
 
   return (
     <Box>
-      <SeatDetailContainer dashboardDetail={dashboarData} />
+      <SeatDetailContainer dashboardDetail={dashboardData} />
       <ConcertDetailContainer concertDetail={concerts} />
     </Box>
   );

@@ -32,7 +32,7 @@ export default function AdminLayout({
           <>
             <Link
               href="/admin/dashboard"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-2xl"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-xl"
             >
               <HomeIcon />
               Home
@@ -40,7 +40,7 @@ export default function AdminLayout({
 
             <Link
               href="/admin/history"
-              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 text-2xl"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 text-xl"
             >
               <HistoryIcon />
               History
@@ -51,7 +51,7 @@ export default function AdminLayout({
         {role === "user" && (
           <Link
             href="/user"
-            className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-2xl"
+            className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-xl"
           >
             <HistoryIcon />
             User Home
@@ -61,7 +61,7 @@ export default function AdminLayout({
         <Link
           href={role === Role.ADMIN ? "/user" : "/admin/dashboard"}
           onClick={switchRole}
-          className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-2xl"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gray-100 font-medium text-xl"
         >
           <SwitchIcon />
           Switch to {role === Role.ADMIN ? Role.USER : Role.ADMIN}

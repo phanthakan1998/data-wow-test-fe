@@ -14,7 +14,7 @@ export default function SeatDetailContainer({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
       <DisplayBox
-        title="Total Concerts"
+        title="Total Seats"
         value={dashboardDetail.totalSeats}
         icon={<PersonIcon size={40} />}
         bgColor="bg-[#0070A4]"

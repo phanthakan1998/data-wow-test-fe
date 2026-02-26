@@ -10,6 +10,7 @@ export default function ConfirmModal({
   cancelText = "",
   onConfirm,
   onCancel,
+  icon,
 }: IConfirmModalProps) {
   const isError = type === "error";
 
@@ -37,7 +38,9 @@ export default function ConfirmModal({
             justifyContent: "center",
             mb: 4,
           }}
-        ></Box>
+        >
+          {icon}
+        </Box>
 
         <Typography
           variant="h6"
